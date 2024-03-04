@@ -64,6 +64,27 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
+  packages/ai:
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/eslint':
+        specifier: ^8.56.1
+        version: 8.56.5
+      '@types/node':
+        specifier: ^20.10.6
+        version: 20.11.24
+      eslint:
+        specifier: ^8.56.0
+        version: 8.57.0
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
   packages/eslint-config:
     devDependencies:
       '@typescript-eslint/eslint-plugin':
@@ -84,39 +105,6 @@ importers:
       eslint-plugin-only-warn:
         specifier: ^1.1.0
         version: 1.1.0
-      typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
-
-  packages/ia:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      '@turbo/gen':
-        specifier: ^1.11.3
-        version: 1.12.4(@types/node@20.11.24)(typescript@5.3.3)
-      '@types/eslint':
-        specifier: ^8.56.1
-        version: 8.56.5
-      '@types/node':
-        specifier: ^20.10.6
-        version: 20.11.24
-      '@types/react':
-        specifier: ^18.2.46
-        version: 18.2.61
-      '@types/react-dom':
-        specifier: ^18.2.18
-        version: 18.2.19
-      eslint:
-        specifier: ^8.56.0
-        version: 8.57.0
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
