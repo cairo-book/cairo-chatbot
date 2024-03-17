@@ -8,9 +8,16 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^20.10.6",
     "@types/eslint": "^8.56.1",
+    "@types/node": "^20.10.6",
     "eslint": "^8.56.0",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@langchain/community": "^0.0.40",
+    "@langchain/core": "^0.1.48",
+    "@langchain/mongodb": "^0.0.1",
+    "@langchain/openai": "^0.0.21",
+    "mongodb": "^6.5.0"
   }
 }

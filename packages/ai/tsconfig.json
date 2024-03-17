@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "esnext",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
