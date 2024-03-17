@@ -12,5 +12,5 @@ export type BookPageHashDto = {
 
 export type GetFreshBookPages = () => Promise<BookPageDto[]>;
 export type GetStoredBookPagesHashes = () => Promise<BookPageHashDto[]>;
-export type RemoveBookPages = (pages: BookPage[]) => void;
-export type UpdateBookPages = (pages: BookPage[]) => void;
+export type RemoveBookPages = (pageNames: BookPage["name"][]) => Promise<void>;
+export type UpdateBookPages = (pages: BookPage[]) => Promise<void>;
