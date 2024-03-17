@@ -5,11 +5,6 @@ type HumanMessage = string;
 type AssistantMessage = string;
 export type ChatHistory = [HumanMessage, AssistantMessage][];
 
-export type ChatMessage = {
-  role: "user" | "assistant";
-  content: string;
-}
-
 export type ConversationalRetrievalQAChainInput = {
   question: string;
   chat_history: ChatHistory;
