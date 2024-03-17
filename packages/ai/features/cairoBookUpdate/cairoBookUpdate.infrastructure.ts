@@ -1,8 +1,8 @@
 import { UpdateBookPages } from "./types";
-import { vectorStore } from "./vectorStore";
 import { Document } from "@langchain/core/documents";
 import { BookPage } from "./bookPage.entity";
 import { client } from "../core/mongodb";
+import { vectorStore } from "../core/vectorStore";
 
 export const updateBookPages: UpdateBookPages = async (pages: BookPage[]) => {
   console.log("Updating book pages with ", pages);
