@@ -5,6 +5,12 @@
   "scripts": {
     "lint": "eslint . --max-warnings 0"
   },
+  "dependencies": {
+    "@langchain/community": "^0.0.36",
+    "@langchain/core": "^0.1.44",
+    "@langchain/openai": "^0.0.19",
+    "langchain": "^0.1.26"
+  },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
