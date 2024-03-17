@@ -1,12 +1,6 @@
 import { MongoDBAtlasVectorSearch } from "@langchain/mongodb";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { MongoClient } from "mongodb";
-
-export const client = new MongoClient(process.env.MONGODB_ATLAS_URI || "");
-
-const dbName = "langchain";
-const collectionName = "store";
-const collection = client.db(dbName).collection(collectionName);
+import { collection } from "../core/mongodb";
 
 export const vectorStore = new MongoDBAtlasVectorSearch(
   new OpenAIEmbeddings({
@@ -17,8 +11,8 @@ export const vectorStore = new MongoDBAtlasVectorSearch(
   }),
   {
     collection,
-    indexName: "default", // The name of the Atlas search index. Defaults to "default"
-    textKey: "text", // The name of the collection field containing the raw content. Defaults to "text"
-    embeddingKey: "embedding", // The name of the collection field containing the embedded text. Defaults to "embedding"
+    indexName: "default",
+    textKey: "text",
+    embeddingKey: "embedding",
   },
 );
