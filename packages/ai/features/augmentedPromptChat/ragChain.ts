@@ -10,8 +10,12 @@ import { ConversationalRetrievalQAChainInput } from "./types";
 import formatChatHistory from "./formatChatHistory";
 import { vectorStore } from "../core/vectorStore";
 
-const model = new ChatOpenAI({
-  streaming: true,
+const questionModel = new ChatOpenAI({
+  modelName: "gpt-3.5-turbo",
+});
+
+const answerModel = new ChatOpenAI({
+  modelName: "gpt-4-turbo-preview",
 });
 
 const condenseQuestionTemplate = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
@@ -21,10 +25,12 @@ Chat History:
 Follow Up Input: {question}
 Standalone question:`;
 const CONDENSE_QUESTION_PROMPT = PromptTemplate.fromTemplate(
-  condenseQuestionTemplate,
+  condenseQuestionTemplate
 );
 
-const answerTemplate = `Answer the question based only on the following context:
+const answerTemplate = `Answer the question based only on the following context, especially when asked to give an example.
+Only use code snippets extracted from the context. The context provided discusses the evolution of the Cairo programming language,
+which has evolved since your cutoff date. Please only use information from the context to answer the question about Cairo. Never talk about the context in your answer. Answer in the language of the question.
 {context}
 
 Question: {question}
@@ -38,7 +44,7 @@ const standaloneQuestionChain = RunnableSequence.from([
       formatChatHistory(input.chat_history),
   },
   CONDENSE_QUESTION_PROMPT,
-  model,
+  questionModel,
   new StringOutputParser(),
 ]);
 
@@ -48,7 +54,7 @@ const answerChain = RunnableSequence.from([
     question: new RunnablePassthrough(),
   },
   ANSWER_PROMPT,
-  model,
+  answerModel,
 ]);
 
 export const ragChatAgent = standaloneQuestionChain.pipe(answerChain);
