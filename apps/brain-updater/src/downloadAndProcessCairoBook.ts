@@ -1,26 +1,45 @@
 import * as fs from "fs";
 import * as path from "path";
-import simpleGit from "simple-git";
+import axios from "axios";
+import AdmZip from "adm-zip";
 import { BookPageDto } from "@repo/ai/features/cairoBookUpdate/types";
 
-const git = simpleGit();
-
-const REPO_URL = "https://github.com/cairo-book/cairo-book.git";
+const REPO_OWNER = "cairo-book";
+const REPO_NAME = "cairo-book";
 const MD_FILE_EXTENSION = ".md";
 
 export async function downloadAndProcessCairoBook(): Promise<BookPageDto[]> {
-  const cloneDir = path.join(__dirname, "cairo-book");
-
   try {
-    await git.clone(REPO_URL, cloneDir);
-    console.log("Repository cloned successfully.");
-  } catch (error) {
-    console.error("Error cloning repository:", error);
-    throw new Error("Failed to clone repository");
-  }
+    const latestReleaseUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/latest`;
+    const response = await axios.get(latestReleaseUrl);
+    const latestRelease = response.data;
 
-  const srcDir = path.join(cloneDir, "src");
-  return processMarkdownFiles(srcDir);
+    const zipAsset = latestRelease.assets.find(
+      (asset: any) => asset.name === "markdown-output.zip"
+    );
+
+    if (!zipAsset) {
+      throw new Error("ZIP asset not found in the latest release.");
+    }
+
+    const zipUrl = zipAsset.browser_download_url;
+    const zipResponse = await axios.get(zipUrl, {
+      responseType: "arraybuffer",
+    });
+    const zipData = zipResponse.data;
+
+    const zipFile = new AdmZip(zipData);
+    const extractDir = path.join(__dirname, "cairo-book");
+    zipFile.extractAllTo(extractDir, true);
+
+    console.log("ZIP file downloaded and extracted successfully.");
+
+    const srcDir = path.join(extractDir, "book/markdown");
+    return processMarkdownFiles(srcDir);
+  } catch (error) {
+    console.error("Error downloading and processing Cairo Book:", error);
+    throw new Error("Failed to download and process Cairo Book");
+  }
 }
 
 function processMarkdownFiles(directory: string): Promise<BookPageDto[]> {
