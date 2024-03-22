@@ -28,9 +28,9 @@ const CONDENSE_QUESTION_PROMPT = PromptTemplate.fromTemplate(
   condenseQuestionTemplate
 );
 
-const answerTemplate = `Answer the question based only on the following context, especially when asked to give an example.
+const answerTemplate = `Answer the question leveraging the following context, especially when asked to give an example.
 Only use code snippets extracted from the context. The context provided discusses the evolution of the Cairo programming language,
-which has evolved since your cutoff date. Please only use information from the context to answer the question about Cairo. Never talk about the context in your answer. Answer in the language of the question.
+which has evolved since your cutoff date. Please only use information from the context to answer the question about Cairo. Answer in the language of the question.
 {context}
 
 Question: {question}
