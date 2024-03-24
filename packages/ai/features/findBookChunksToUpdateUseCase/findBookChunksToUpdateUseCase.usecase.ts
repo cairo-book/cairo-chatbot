@@ -1,10 +1,10 @@
-import { BookPage } from "../cairoBookUpdate/bookPage.entity";
-import { BookPageHashDto } from "../cairoBookUpdate/types";
+import { BookChunk } from "../cairoBookUpdate/bookPage.entity";
+import { BookChunkHashDto } from "../cairoBookUpdate/types";
 
-export function findBookPagesToUpdateUseCase(
-  freshPages: BookPage[],
-  storedPageHashes: BookPageHashDto[],
-): BookPage[] {
+export function findBookChunksToUpdateUseCase(
+  freshPages: BookChunk[],
+  storedPageHashes: BookChunkHashDto[]
+): BookChunk[] {
   const storedHashesMap = new Map<string, string>();
   for (const hashDto of storedPageHashes) {
     storedHashesMap.set(hashDto.name, hashDto.contentHash);

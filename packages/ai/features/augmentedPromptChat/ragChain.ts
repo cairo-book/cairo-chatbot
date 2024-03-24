@@ -16,6 +16,7 @@ const questionModel = new ChatOpenAI({
 
 const answerModel = new ChatOpenAI({
   modelName: "gpt-4-turbo-preview",
+  temperature: 0.1,
 });
 
 const condenseQuestionTemplate = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
