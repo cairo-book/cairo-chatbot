@@ -5,8 +5,8 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
 export const splitBookPages: SplitBookPages = async (pages) => {
   const textSplitter = RecursiveCharacterTextSplitter.fromLanguage("markdown", {
-    chunkSize: 2048,
-    chunkOverlap: 500,
+    chunkSize: 4096,
+    chunkOverlap: 512,
   });
 
   const documents: Document[] = [];
@@ -20,6 +20,11 @@ export const splitBookPages: SplitBookPages = async (pages) => {
         },
       ]
     );
+
+    // Assign unique number to each page
+    pageDocuments.forEach((doc, index) => {
+      doc.metadata.chunkNumber = index;
+    });
     documents.push(...pageDocuments);
   }
   return documents;

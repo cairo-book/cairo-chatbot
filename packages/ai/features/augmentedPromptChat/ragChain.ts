@@ -9,6 +9,8 @@ import formatDocumentsAsString from "./formatDocumentAsString";
 import { ConversationalRetrievalQAChainInput } from "./types";
 import formatChatHistory from "./formatChatHistory";
 import { vectorStore } from "../core/vectorStore";
+import { findBookChunk } from "./findBookChunk.infrastructure";
+import { DocumentInterface } from "@langchain/core/documents";
 
 const questionModel = new ChatOpenAI({
   modelName: "gpt-3.5-turbo",
@@ -51,7 +53,28 @@ const standaloneQuestionChain = RunnableSequence.from([
 
 const answerChain = RunnableSequence.from([
   {
-    context: vectorStore.asRetriever().pipe(formatDocumentsAsString),
+    context: vectorStore.asRetriever(3).pipe(async (documents) => {
+      const expandedDocuments = await Promise.all(
+        documents.map(async (doc) => {
+          const docNameParts = doc.metadata._id.split("-");
+          const chunkNumber = Number(docNameParts[docNameParts.length - 1]);
+
+          const nextDocName = `${docNameParts.slice(0, -1).join("-")}-${
+            chunkNumber + 1
+          }`;
+
+          const nextDoc = await findBookChunk(nextDocName);
+          console.log(nextDoc);
+          return nextDoc ? [doc, nextDoc] : [doc];
+        })
+      );
+
+      return formatDocumentsAsString(
+        expandedDocuments.flat() as unknown as DocumentInterface<
+          Record<string, any>
+        >[]
+      );
+    }),
     question: new RunnablePassthrough(),
   },
   ANSWER_PROMPT,

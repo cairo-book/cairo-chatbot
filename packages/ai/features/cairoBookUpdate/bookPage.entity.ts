@@ -9,7 +9,10 @@ export class BookChunkFactory {
   }
 
   static fromDocument(doc: Document): BookChunk {
-    return new BookChunk(doc.metadata.name, doc.pageContent);
+    return new BookChunk(
+      `${doc.metadata.name}-${doc.metadata.chunkNumber}`,
+      doc.pageContent
+    );
   }
 }
 

@@ -7,7 +7,8 @@ import { Document } from "@langchain/core/documents";
  * @param documents
  * @returns A string of the documents page content, separated by newlines.
  */
-const formatDocumentsAsString = (documents: Document[]): string =>
-  documents.map((doc) => doc.pageContent).join("\n\n");
+const formatDocumentsAsString = (documents: Document[]): string => {
+  return documents.map((doc) => doc.pageContent).join("\n\n");
+};
 
 export default formatDocumentsAsString;

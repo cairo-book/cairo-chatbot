@@ -24,10 +24,13 @@ export async function cairoBookUpdateUseCase(context: {
   const storedChunks = await context.getStoredBookPagesHashes();
   const chunksToRemove = findBookChunksToRemoveUseCase(chunks, storedChunks);
   const chunksToUpdate = findBookChunksToUpdateUseCase(chunks, storedChunks);
-  
+
   await context.removeBookPages(chunksToRemove);
   await context.updateBookPages(chunksToUpdate);
 
   console.log("Removed book pages with names ", chunksToRemove);
-  console.log("Updated book pages with names ", chunksToUpdate.map((chunk) => chunk.name));
+  console.log(
+    "Updated book pages with names ",
+    chunksToUpdate.map((chunk) => chunk.name)
+  );
 }
