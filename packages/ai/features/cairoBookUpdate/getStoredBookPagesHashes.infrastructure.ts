@@ -7,11 +7,11 @@ export const getStoredBookPagesHashes: GetStoredBookPagesHashes = async () => {
       {},
       {
         projection: { _id: 1, contentHash: 1 },
-      },
+      }
     )
     .toArray();
 
-  // Transform documents into an array of BookPageHashDto
+  // Transform documents into an array of BookChunkHashDto
   return documents.map((doc) => ({
     name: doc._id.toString(),
     contentHash: doc.contentHash,

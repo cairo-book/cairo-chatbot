@@ -4,9 +4,10 @@ import {
   RemoveBookPages,
   UpdateBookPages,
 } from "./types";
-import { BookPageFactory } from "./bookPage.entity";
-import { findBookPagesToUpdateUseCase } from "../findBookPagesToUpdateUseCase/findBookPagesToUpdateUseCase.usecase";
-import { findBookPagesToRemoveUseCase } from "../findBookPagesToRemoveUseCase/findBookPagesToRemove.usecase";
+import { BookChunkFactory } from "./bookPage.entity";
+import { findBookChunksToUpdateUseCase } from "../findBookChunksToUpdateUseCase/findBookChunksToUpdateUseCase.usecase";
+import { findBookChunksToRemoveUseCase } from "../findBookChunksToRemoveUseCase/findBookChunksToRemove.usecase";
+import { splitBookPages } from "./splitPagesIntoChunks.infrastructure";
 
 export async function cairoBookUpdateUseCase(context: {
   getFreshBookPages: GetFreshBookPages;
@@ -17,16 +18,19 @@ export async function cairoBookUpdateUseCase(context: {
   console.log("Running cairoBookUpdate");
 
   const pagesDto = await context.getFreshBookPages();
-  const pages = pagesDto.map(BookPageFactory.fromDto);
-  const storedPages = await context.getStoredBookPagesHashes();
-  console.log("Pages = ", pages);
-  console.log("Stored pages = ", storedPages);
+  const pagesSplit = await splitBookPages(pagesDto);
+  const chunks = pagesSplit.map(BookChunkFactory.fromDocument);
 
-  const pagesToRemove = findBookPagesToRemoveUseCase(pages, storedPages);
-  console.log("pagesToRemove = ", pagesToRemove);
-  await context.removeBookPages(pagesToRemove);
+  const storedChunks = await context.getStoredBookPagesHashes();
+  const chunksToRemove = findBookChunksToRemoveUseCase(chunks, storedChunks);
+  const chunksToUpdate = findBookChunksToUpdateUseCase(chunks, storedChunks);
 
-  const pagesToUpdate = findBookPagesToUpdateUseCase(pages, storedPages);
-  console.log("pagesToUpdate = ", pagesToUpdate);
-  await context.updateBookPages(pagesToUpdate);
+  await context.removeBookPages(chunksToRemove);
+  await context.updateBookPages(chunksToUpdate);
+
+  console.log("Removed book pages with names ", chunksToRemove);
+  console.log(
+    "Updated book pages with names ",
+    chunksToUpdate.map((chunk) => chunk.name)
+  );
 }

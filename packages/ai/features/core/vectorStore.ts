@@ -14,5 +14,5 @@ export const vectorStore = new MongoDBAtlasVectorSearch(
     indexName: "default",
     textKey: "text",
     embeddingKey: "embedding",
-  },
+  }
 );
