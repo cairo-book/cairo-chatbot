@@ -19,5 +19,8 @@
   "packageManager": "pnpm@8.9.0",
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "aws4": "^1.12.0"
   }
 }

@@ -33,8 +33,8 @@ const CONDENSE_QUESTION_PROMPT = PromptTemplate.fromTemplate(
 
 const answerTemplate = `Answer the question leveraging the following context, especially when asked to give an example.
 Only use code snippets extracted from the context. The context provided discusses the evolution of the Cairo programming language,
-which has evolved since your cutoff date. Please only use information from the context to answer the question about Cairo. Answer in the language of the question.
-{context}
+which has evolved since your cutoff date. Please only use information from the context to answer the question about Cairo. Answer in the language of the question. All answers are relative to Cairo, not Rust.
+{context}. Do not answer in anything else than english.
 
 Question: {question}
 `;
@@ -64,7 +64,6 @@ const answerChain = RunnableSequence.from([
           }`;
 
           const nextDoc = await findBookChunk(nextDocName);
-          console.log(nextDoc);
           return nextDoc ? [doc, nextDoc] : [doc];
         })
       );

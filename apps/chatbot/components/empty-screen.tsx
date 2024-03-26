@@ -6,12 +6,16 @@ import { IconArrowRight } from './ui/icon'
 
 const exampleMessages = [
   { 
-    heading: 'Explain technical concepts',
-    message: `What is a "cairo programming language"?`
+    heading: 'Discover Cairo',
+    message: `What is the Cairo Programming Language?`
   },
   {
-    heading: 'Testing a program',
-    message: `How to test my Cairo program?`
+    heading: 'Write a simple program',
+    message: `How do I write a simple program in Cairo?`
+  },
+  {
+    heading: 'Create a Starknet contract',
+    message: `Write a basic counter contract.`
   }
 ]
 
@@ -25,7 +29,7 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
         <p className="mb-2 leading-normal text-muted-foreground">
           This is an open source AI chatbot app based on{' '}
           <ExternalLink href="https://github.com/vercel/ai-chatbot">Vercel Ai ChatBot</ExternalLink>
-          . This chatbot makes it easier to browse Cairo Language documentation by interacting with the chatbot.
+          . This chatbot can answer questions about the Cairo Language and help you understand specific concepts.
         </p>
         <p className="leading-normal text-muted-foreground">
           You can start a conversation here or try the following examples:
