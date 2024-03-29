@@ -1,13 +1,22 @@
 import { createHash } from "node:crypto";
 import { BookPageDto } from "./types";
 
-export class BookPageFactory {
-  static fromDto(pageDto: BookPageDto): BookPage {
-    return new BookPage(pageDto.name, pageDto.content);
+import { Document } from "@langchain/core/documents";
+
+export class BookChunkFactory {
+  static fromDto(pageDto: BookPageDto): BookChunk {
+    return new BookChunk(pageDto.name, pageDto.content);
+  }
+
+  static fromDocument(doc: Document): BookChunk {
+    return new BookChunk(
+      `${doc.metadata.name}-${doc.metadata.chunkNumber}`,
+      doc.pageContent
+    );
   }
 }
 
-export class BookPage {
+export class BookChunk {
   name: string;
   content: string;
   contentHash: string;
@@ -15,6 +24,10 @@ export class BookPage {
   constructor(name: string, content: string) {
     this.name = name;
     this.content = content;
-    this.contentHash = createHash("md5").update(content).digest("hex");
+    this.contentHash = BookChunk.calculateHash(content);
+  }
+
+  static calculateHash(content: string): string {
+    return createHash("md5").update(content).digest("hex");
   }
 }

@@ -1,16 +1,18 @@
-import { BookPage } from "./bookPage.entity";
+import { BookChunk } from "./bookPage.entity";
+import { Document } from "@langchain/core/documents";
 
 export type BookPageDto = {
   name: string;
   content: string;
 };
 
-export type BookPageHashDto = {
+export type BookChunkHashDto = {
   name: string;
   contentHash: string;
 };
 
 export type GetFreshBookPages = () => Promise<BookPageDto[]>;
-export type GetStoredBookPagesHashes = () => Promise<BookPageHashDto[]>;
-export type RemoveBookPages = (pageNames: BookPage["name"][]) => Promise<void>;
-export type UpdateBookPages = (pages: BookPage[]) => Promise<void>;
+export type GetStoredBookPagesHashes = () => Promise<BookChunkHashDto[]>;
+export type RemoveBookPages = (pageNames: BookChunk["name"][]) => Promise<void>;
+export type UpdateBookPages = (pages: BookChunk[]) => Promise<void>;
+export type SplitBookPages = (pages: BookPageDto[]) => Promise<Document[]>;
