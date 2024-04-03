@@ -2,6 +2,8 @@ import { augmentedPromptChatUseCase } from "@repo/ai/features/augmentedPromptCha
 import { StreamingTextResponse } from 'ai'
 import { InvalidKeyError } from '@repo/ai/error/invalidKeyError.error'
 
+export const maxDuration = 60;
+
 export async function POST(req: Request) {
   console.log('Handling POST /api/chat');
 
