@@ -4,13 +4,14 @@ import axios from "axios";
 import AdmZip from "adm-zip";
 import { BookPageDto } from "@repo/ai/features/cairoBookUpdate/types";
 
-const REPO_OWNER = "cairo-book";
-const REPO_NAME = "cairo-book";
 const MD_FILE_EXTENSION = ".md";
 
-export async function downloadAndProcessCairoBook(): Promise<BookPageDto[]> {
+export async function downloadAndProcessGithubRelease(
+  repo_owner: string,
+  repo_name: string
+): Promise<BookPageDto[]> {
   try {
-    const latestReleaseUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/latest`;
+    const latestReleaseUrl = `https://api.github.com/repos/${repo_owner}/${repo_name}/releases/latest`;
     const response = await axios.get(latestReleaseUrl);
     const latestRelease = response.data;
 
@@ -29,7 +30,7 @@ export async function downloadAndProcessCairoBook(): Promise<BookPageDto[]> {
     const zipData = zipResponse.data;
 
     const zipFile = new AdmZip(zipData);
-    const extractDir = path.join(__dirname, "cairo-book");
+    const extractDir = path.join(__dirname, repo_name);
     zipFile.extractAllTo(extractDir, true);
 
     console.log("ZIP file downloaded and extracted successfully.");
@@ -37,32 +38,57 @@ export async function downloadAndProcessCairoBook(): Promise<BookPageDto[]> {
     const srcDir = path.join(extractDir, "book/markdown");
     return processMarkdownFiles(srcDir);
   } catch (error) {
-    console.error("Error downloading and processing Cairo Book:", error);
-    throw new Error("Failed to download and process Cairo Book");
+    console.error(`Error downloading and processing ${repo_name}:`, error);
+    throw new Error(`Failed to download and process ${repo_name}.`);
   }
 }
 
 function processMarkdownFiles(directory: string): Promise<BookPageDto[]> {
   return new Promise((resolve, reject) => {
-    fs.readdir(directory, (err, files) => {
-      if (err) {
-        console.error("Error reading directory:", err);
-        return reject(err);
-      }
+    const pages: BookPageDto[] = [];
 
-      const pages: BookPageDto[] = [];
-      files.forEach((file) => {
-        const filePath = path.join(directory, file);
-        if (path.extname(file).toLowerCase() === MD_FILE_EXTENSION) {
-          const content = fs.readFileSync(filePath, "utf8");
-          pages.push({
-            name: path.basename(file, MD_FILE_EXTENSION),
-            content,
-          });
+    const processDirectory = (currentDir: string) => {
+      fs.readdir(currentDir, (err, files) => {
+        if (err) {
+          console.error("Error reading directory:", err);
+          return reject(err);
         }
-      });
 
-      resolve(pages);
-    });
+        let pendingFiles = files.length;
+
+        if (pendingFiles === 0) {
+          return resolve(pages);
+        }
+
+        files.forEach((file) => {
+          const filePath = path.join(currentDir, file);
+
+          fs.stat(filePath, (err, stats) => {
+            if (err) {
+              console.error("Error getting file stats:", err);
+              return reject(err);
+            }
+
+            if (stats.isDirectory()) {
+              processDirectory(filePath);
+            } else if (path.extname(file).toLowerCase() === MD_FILE_EXTENSION) {
+              const content = fs.readFileSync(filePath, "utf8");
+              pages.push({
+                name: path.basename(file, MD_FILE_EXTENSION),
+                content,
+              });
+            }
+
+            pendingFiles--;
+
+            if (pendingFiles === 0) {
+              resolve(pages);
+            }
+          });
+        });
+      });
+    };
+
+    processDirectory(directory);
   });
 }
