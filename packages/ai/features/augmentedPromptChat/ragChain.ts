@@ -13,11 +13,11 @@ import { findBookChunk } from "./findBookChunk.infrastructure";
 import { DocumentInterface } from "@langchain/core/documents";
 
 const questionModel = new ChatOpenAI({
-  modelName: "gpt-3.5-turbo",
+  modelName: process.env.QUESTION_MODEL_NAME,
 });
 
 const answerModel = new ChatOpenAI({
-  modelName: "gpt-4-turbo-preview",
+  modelName: process.env.ANSWER_MODEL_NAME,
   temperature: 0.1,
 });
 
