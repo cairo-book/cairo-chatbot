@@ -21,7 +21,10 @@ const answerModel = new ChatOpenAI({
   temperature: 0.1,
 });
 
-const condenseQuestionTemplate = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
+const condenseQuestionTemplate = `
+- Given: A conversation history and a follow-up question
+- Task: Rephrase the follow-up question as a standalone question
+- Language: English
 
 Chat History:
 {chat_history}
@@ -31,10 +34,19 @@ const CONDENSE_QUESTION_PROMPT = PromptTemplate.fromTemplate(
   condenseQuestionTemplate
 );
 
-const answerTemplate = `Answer the question leveraging the following context, especially when asked to give an example.
-Only use code snippets extracted from the context. The context provided discusses the evolution of the Cairo programming language,
-which has evolved since your cutoff date. Please only use information from the context to answer the question about Cairo. Answer in the language of the question. All answers are relative to Cairo, not Rust.
-{context}. Do not answer in anything else than english.
+const answerTemplate = `
+- Primary focus: Answer the question using the provided context
+- Context: Information about the Cairo programming language
+- Key points:
+  1. Use ONLY information from the given context
+  2. When examples are requested, prioritize using the context
+  3. Only use code snippets directly extracted from the context
+  4. Answer in english in all cases
+  5. All answers should relate to Cairo directly.
+  6. The context may contain information beyond your original knowledge cutoff
+
+Remember: Stick strictly to the provided context when answering about Cairo.
+{context}
 
 Question: {question}
 `;

@@ -29,10 +29,14 @@ export OPENAI_API_KEY="sk-<...>"
 export MONGODB_ATLAS_URI="mongodb+srv:<...>"
 ```
 
+Add a `.env.local` file at the root of the repo with the following content (replace the values with your own):
+```shell
+QUESTION_MODEL_NAME="gpt-3.5-turbo"
+ANSWER_MODEL_NAME="gpt-4-turbo-preview"
+```
+
 To develop all apps and packages, run the following command:
 
 ```
 pnpm dev
 ```
-
-
