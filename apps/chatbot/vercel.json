@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://agent.starknet.id",
+      "permanent": true
+    }
+  ]
+}
