@@ -1,6 +1,8 @@
 # Cairo chatbot
 
-This is a chatbot to help you learn and code with the [Cairo language](https://cairo-lang.org/)
+This is a chatbot to help you learn and code with the [Cairo language](https://cairo-lang.org/).
+
+Archived in favor of the [Starknet Agent](https://github.com/cairo-book/starknet-agent)
 
 ## What's inside?
 
